@@ -1,0 +1,38 @@
+import neflis.*
+
+describe "Tests de Cuentas"{
+
+	method initialize() {
+		margoZavala.ver(blackSails)
+		margoZavala.ver(avengersEndgame)
+	}
+	
+	test "Cosme puede ver Black Sails" 	{
+		
+		assert.equals(true,cosmeFulanito.puedeVer(blackSails))
+	}
+	
+	test "Cosme puede ver “Sean Eternos”" 	{
+		
+		assert.equals(false,cosmeFulanito.puedeVer(seanEternos))
+	}
+	
+	test "Margo puede ver “Sean Eternos”" 	{
+		
+		assert.equals(true,margoZavala.puedeVer(seanEternos))
+	}
+	
+	test "Margo ve “Black Sails”" 	{
+		
+		assert.that(margoZavala.cosasVistas().contains(blackSails))
+	}	
+	
+	test "Calcular la valoración de Cosme"
+	{		
+		assert.equals(0, cosmeFulanito.valoracion())	
+	}	
+	
+	test "Calcular la valoración de Margo, luego de ver “Black Sails” y “Avengers Endgame”"{
+		assert.equals(34, margoZavala.valoracion())
+	}
+}

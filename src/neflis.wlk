@@ -36,6 +36,28 @@ object margoZavala {
 	
 	var cosasVistas = []
 	
+	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
+	method puedeVer(contenido) = planContratado.puedeVer(contenido)
+	
+	method ver(contenido) {
+		if (self.puedeVer(contenido)) {
+			cosasVistas.add(contenido)
+		}
+	}
+	
+	method cosasVistas(){return cosasVistas}
+
+	method valoracion() {
+	
+		//Prevengo división por cero
+		if (cosasVistas.size() == 0) {return 0}
+	
+		// Sumarizo la valorizacion de cada contenido visto
+		var sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
+	
+		// Calculo el promedio
+		return sumValoracion / cosasVistas.size()
+	}		
 }
 
 object blackSails {
