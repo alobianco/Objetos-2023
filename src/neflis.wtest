@@ -64,4 +64,24 @@ describe "Test de Recomendaciones"{
 		margoZavala.ver(seanEternos)		
 		assert.equals(true,margoZavala.veria(blackSails))
 	}
+	
+	test "Cosme vería “Black Sails”"{
+		
+		assert.equals(true,cosmeFulanito.veria(blackSails))
+		
+	}
+	
+	test "Cosme vería “Sean Eternos”"{
+		
+		assert.equals(false,cosmeFulanito.veria(seanEternos))
+		
+	}
+		
+	test "Cosme con agregado de preferencia de género “Documental” podría ver “Sean Eternos”"{
+		
+		cosmeFulanito.preferencias("Documental")
+		assert.equals(true,cosmeFulanito.veria(seanEternos))
+		
+	}
+	
 }

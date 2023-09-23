@@ -2,7 +2,8 @@ object cosmeFulanito {
 
 	const planContratado = planBasico
 
-	var cosasVistas = []	
+	var cosasVistas = []
+	var preferencias= #{"Acción", "Aventuras"}
 	
 	//1.Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
@@ -12,7 +13,7 @@ object cosmeFulanito {
 		if (self.puedeVer(contenido)) {
 			cosasVistas.add(contenido)
 		}
-	}
+	}	
 		
 	/*3.Conocer la valoración del usuario, que está dada por 
 	el promedio de las valoraciones de las cosas que ya vió.*/	
@@ -27,7 +28,34 @@ object cosmeFulanito {
 		// Calculo el promedio
 		return sumValoracion / cosasVistas.size()
 	}
-			
+	
+	/*
+	  Cosme en cambio, prefiere, por el momento, 
+	  * ver contenidos que tegan géneros de Acción o Aventuras.		   
+	  
+	  Tener en cuenta que esto depende de cada tipo de contenido:
+		Película: la intersección no debe ser vacía.
+		Serie: debe contener el género de dicha serie
+		Documental: debe incluir “Documental” 	
+	  }*/			  
+	 	 
+	method preferencias() {return preferencias}
+	method preferencias (genero) {preferencias.add(genero)}
+	
+	method veria(contenido) {
+		const tipoContenido = contenido.tipo()
+		const generosContenido = contenido.generos()
+				
+		if (tipoContenido == "Película" || tipoContenido == "Serie") 
+		{
+			return generosContenido.any ({ genero => preferencias.contains(genero) })
+		} else if (tipoContenido == "Documental") {
+			return generosContenido.contains("Documental") && generosContenido.any ({ genero => preferencias.contains(genero) })
+		} else {
+			return false
+		}
+	}
+		
 }
 
 object margoZavala {
@@ -90,7 +118,8 @@ object blackSails {
 	const generos = #{"Acción"}	
 	
 	method valoracion() = temporadas * capitulos
-
+	method generos(){return generos}
+	method tipo(){return tipo}
 }
 
 object avengersEndgame {
@@ -99,15 +128,18 @@ object avengersEndgame {
 	const generos = #{"Acción", "Drama", "Aventuras"}
 	
 	method valoracion() = generos.size() * 12
-	
+	method generos(){return generos}
+	method tipo(){return tipo}
 }
 
 object seanEternos {
 	
 	const tipo = "Documental"
+	const generos = #{"Documental"}	
 	
 	method valoracion() = 100
-	
+	method generos(){return generos}
+	method tipo(){return tipo}
 }
 
 object planBasico {
