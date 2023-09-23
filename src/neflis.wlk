@@ -4,6 +4,9 @@ object cosmeFulanito {
 
 	var cosasVistas = []	
 	
+	//1.Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
+	method puedeVer(contenido) = planContratado.puedeVer(contenido)
+	
 }
 
 object margoZavala {
@@ -55,6 +58,6 @@ object planPremium {
 
 }
 
-//Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
+
 
 
