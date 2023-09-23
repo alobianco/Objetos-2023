@@ -12,7 +12,22 @@ object cosmeFulanito {
 		if (self.puedeVer(contenido)) {
 			cosasVistas.add(contenido)
 		}
-	}	
+	}
+		
+	/*3.Conocer la valoración del usuario, que está dada por 
+	el promedio de las valoraciones de las cosas que ya vió.*/	
+	method valoracion() {
+	
+		//Prevengo división por cero
+		if (cosasVistas.size() == 0) {return 0}
+	
+		// Sumarizo la valorizacion de cada contenido visto
+		var sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
+	
+		// Calculo el promedio
+		return sumValoracion / cosasVistas.size()
+	}
+			
 }
 
 object margoZavala {
@@ -22,7 +37,6 @@ object margoZavala {
 	var cosasVistas = []
 	
 }
-
 
 object blackSails {
 	
