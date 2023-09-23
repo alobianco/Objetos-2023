@@ -36,3 +36,32 @@ describe "Tests de Cuentas"{
 		assert.equals(34, margoZavala.valoracion())
 	}
 }
+
+
+describe "Test de Recomendaciones"{	
+	
+	method initialize() {
+		
+		margoZavala.desvio(0.15)
+		
+	}
+	
+	test "Margo (inicialmente con una lista de contenidos vistos vacía) podría ver “Sean Eternos”"{
+				
+		assert.equals(true,margoZavala.veria(seanEternos))	
+	}
+	
+	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”"{
+				
+		margoZavala.ver(seanEternos)
+		assert.equals(false,margoZavala.veria(blackSails))
+		
+	}	
+	
+	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 70%"{
+		
+		margoZavala.desvio(0.7)
+		margoZavala.ver(seanEternos)		
+		assert.equals(true,margoZavala.veria(blackSails))
+	}
+}

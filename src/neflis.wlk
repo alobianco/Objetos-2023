@@ -33,8 +33,8 @@ object cosmeFulanito {
 object margoZavala {
 	
 	const planContratado = planPremium
-	
 	var cosasVistas = []
+	var desvio 
 	
 	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
@@ -57,7 +57,29 @@ object margoZavala {
 	
 		// Calculo el promedio
 		return sumValoracion / cosasVistas.size()
-	}		
+	}
+	
+	
+	/* 
+	 * Recomendaciones
+		Cada cuenta tiene una forma distinta de recomendar contenido.
+		Lo que queremos determinar en este punto, es si una cuenta vería un contenido.		
+		Margo prefiere ver contenidos que tienen una valoración similar a la suya. 
+		La similitud actualmente está dada por un desvío del 15%, pero podría cambiar.
+		En el caso de no haber visto ningún contenido (valoración igual a 0), todo contenido puede ser recomendado.
+	 */
+	 
+	 method veria(contenido){
+	 	if (self.valoracion()==0){
+	 		return true
+		} else{		
+			return contenido.valoracion().between(self.valoracion() * ( 1 - desvio), self.valoracion() * ( 1 + desvio) )
+		}
+	 }
+	 
+	 method desvio(){return desvio}
+	 method desvio (_desvio) {desvio = _desvio}
+	 	 	
 }
 
 object blackSails {
