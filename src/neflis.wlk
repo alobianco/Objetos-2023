@@ -6,7 +6,13 @@ object cosmeFulanito {
 	
 	//1.Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
-	
+
+	//2. Hacer que Cosme Fulanito pueda ver un contenido
+	method ver(contenido) {
+		if (self.puedeVer(contenido)) {
+			cosasVistas.add(contenido)
+		}
+	}	
 }
 
 object margoZavala {
