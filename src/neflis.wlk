@@ -2,8 +2,8 @@ object cosmeFulanito {
 
 	const planContratado = planBasico
 
-	var cosasVistas = []
-	var preferencias= #{"Acción", "Aventuras"}
+	const cosasVistas = []
+	const preferencias = #{"Acción", "Aventuras"}
 	
 	//1.Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
@@ -23,7 +23,7 @@ object cosmeFulanito {
 		if (cosasVistas.size() == 0) {return 0}
 	
 		// Sumarizo la valorizacion de cada contenido visto
-		var sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
+		const sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
 	
 		// Calculo el promedio
 		return sumValoracion / cosasVistas.size()
@@ -61,7 +61,7 @@ object cosmeFulanito {
 object margoZavala {
 	
 	const planContratado = planPremium
-	var cosasVistas = []
+	const cosasVistas = []
 	var desvio 
 	
 	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
@@ -81,7 +81,7 @@ object margoZavala {
 		if (cosasVistas.size() == 0) {return 0}
 	
 		// Sumarizo la valorizacion de cada contenido visto
-		var sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
+		const sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
 	
 		// Calculo el promedio
 		return sumValoracion / cosasVistas.size()
