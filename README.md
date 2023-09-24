@@ -6,6 +6,6 @@
 
 ## Integrantes
 - Integrante 1: Flavio Milossi
-- Integrante 2
-- Integrante 3
-- Integrante 4
+- Integrante 2: Imanol Peñaloza
+- Integrante 3: Royer Yampasi
+- Integrante 4: Agustín Lobianco
