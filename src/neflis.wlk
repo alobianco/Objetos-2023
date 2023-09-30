@@ -62,7 +62,7 @@ object margoZavala {
 	
 	const planContratado = planPremium
 	const cosasVistas = []
-	var desvio 
+	var property desvio 
 	
 	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
@@ -105,46 +105,40 @@ object margoZavala {
 		}
 	 }
 	 
-	 method desvio(){return desvio}
-	 method desvio (_desvio) {desvio = _desvio}
-	 	 	
 }
 
 object blackSails {
 	
-	const tipo = "Serie"
+	const property tipo = "Serie"
 	const temporadas = 4
 	const capitulos = 8
-	const generos = #{"Acción"}	
+	const property generos = #{"Acción"}	
+	const property plan="Basico"
 	
 	method valoracion() = temporadas * capitulos
-	method generos(){return generos}
-	method tipo(){return tipo}
 }
 
 object avengersEndgame {
 	
 	const tipo = "Película"
-	const generos = #{"Acción", "Drama", "Aventuras"}
+	const property generos = #{"Acción", "Drama", "Aventuras"}
+	const property plan="Basico"
 	
 	method valoracion() = generos.size() * 12
-	method generos(){return generos}
-	method tipo(){return tipo}
 }
 
 object seanEternos {
 	
-	const tipo = "Documental"
-	const generos = #{"Documental"}	
+	const property tipo = "Documental"
+	const property generos = #{"Documental"}
+	const property plan= "Premium"
 	
 	method valoracion() = 100
-	method generos(){return generos}
-	method tipo(){return tipo}
 }
 
 object planBasico {
 	
-	method puedeVer(contenido) = contenido == blackSails || contenido == avengersEndgame
+	method puedeVer(contenido) = contenido.plan() == "Basico"
 
 }
 
