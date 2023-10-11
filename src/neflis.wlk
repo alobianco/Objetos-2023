@@ -46,9 +46,11 @@ object cosmeFulanito {
 		const tipoContenido = contenido.tipo()
 		const generosContenido = contenido.generos()
 				
-		if (tipoContenido == "Película" || tipoContenido == "Serie") 
+		if (tipoContenido == "Película") 
 		{
 			return generosContenido.any ({ genero => preferencias.contains(genero) })
+		}else if (tipoContenido == "Serie"){
+			return generosContenido.all({genero => preferencias.contains(genero)})
 		} else if (tipoContenido == "Documental") {
 			return generosContenido.contains("Documental") && generosContenido.any ({ genero => preferencias.contains(genero) })
 		} else {
@@ -62,7 +64,7 @@ object margoZavala {
 	
 	const planContratado = planPremium
 	const cosasVistas = []
-	var property desvio 
+	var property desvio = 0.15
 	
 	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
 	method puedeVer(contenido) = planContratado.puedeVer(contenido)
