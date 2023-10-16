@@ -122,7 +122,7 @@ object blackSails {
 
 object avengersEndgame {
 	
-	const tipo = "Película"
+	const property tipo = "Película"
 	const property generos = #{"Acción", "Drama", "Aventuras"}
 	const property plan="Basico"
 	
@@ -139,8 +139,9 @@ object seanEternos {
 }
 
 object planBasico {
+	const property contenidos=#{avengersEndgame,blackSails}
 	
-	method puedeVer(contenido) = contenido.plan() == "Basico"
+	method puedeVer(contenido) =contenidos.contains(contenido)
 
 }
 
