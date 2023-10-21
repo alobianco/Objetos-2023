@@ -6,7 +6,7 @@ object cosmeFulanito {
 	const preferencias = #{"Acción", "Aventuras"}
 	
 	//1.Saber si Cosme puede ver una serie o película de acuerdo al plan que tiene
-	method puedeVer(contenido) = planContratado.puedeVer(contenido)
+	method puedeVer(contenido) = planContratado.perteneceAPlan(contenido)
 
 	//2. Hacer que Cosme Fulanito pueda ver un contenido
 	method ver(contenido) {
@@ -43,19 +43,7 @@ object cosmeFulanito {
 	method preferencias (genero) {preferencias.add(genero)}
 	
 	method veria(contenido) {
-		const tipoContenido = contenido.tipo()
-		const generosContenido = contenido.generos()
-				
-		if (tipoContenido == "Película") 
-		{
-			return generosContenido.any ({ genero => preferencias.contains(genero) })
-		}else if (tipoContenido == "Serie"){
-			return generosContenido.all({genero => preferencias.contains(genero)})
-		} else if (tipoContenido == "Documental") {
-			return generosContenido.contains("Documental") && generosContenido.any ({ genero => preferencias.contains(genero) })
-		} else {
-			return false
-		}
+		return contenido.esRecomendadoA(self)
 	}
 		
 }
@@ -67,7 +55,7 @@ object margoZavala {
 	var property desvio = 0.15
 	
 	//Polimorfismo misma interfaz que Cosme, agregado para la prueba
-	method puedeVer(contenido) = planContratado.puedeVer(contenido)
+	method puedeVer(contenido) = planContratado.perteneceAPlan(contenido)
 	
 	method ver(contenido) {
 		if (self.puedeVer(contenido)) {
@@ -114,41 +102,45 @@ object blackSails {
 	const property tipo = "Serie"
 	const temporadas = 4
 	const capitulos = 8
-	const property generos = #{"Acción"}	
-	const property plan="Basico"
+	const property generos = #{"Acción"}
 	
+	method perteneceAPlanBasico() = true
 	method valoracion() = temporadas * capitulos
+	
+	method esRecomendadoA(persona){
+		 return  persona.preferencias().filter { n => self.generos().contains(n)} == self.generos()
+		}
 }
 
 object avengersEndgame {
 	
 	const property tipo = "Película"
 	const property generos = #{"Acción", "Drama", "Aventuras"}
-	const property plan="Basico"
 	
+	method perteneceAPlanBasico() = true
 	method valoracion() = generos.size() * 12
+	method esRecomendadoA(persona){
+		return !((persona.preferencias().intersection(generos)) == #{})
+	}
 }
 
 object seanEternos {
 	
 	const property tipo = "Documental"
 	const property generos = #{"Documental"}
-	const property plan= "Premium"
 	
+	method perteneceAPlanBasico() = false
 	method valoracion() = 100
+	method esRecomendadoA(persona){
+		return persona.preferencias().contains("Documental")
+	}
 }
 
-object planBasico {
-	const property contenidos=#{avengersEndgame,blackSails}
-	
-	method puedeVer(contenido) =contenidos.contains(contenido)
-
+object planBasico{
+	method perteneceAPlan(contenido){return contenido.perteneceAPlanBasico() }
 }
-
-object planPremium {
-
-	method puedeVer(contenido) = true
-
+object planPremium{
+	method perteneceAPlan(contenido) = true
 }
 
 
