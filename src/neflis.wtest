@@ -1,7 +1,31 @@
-import neflis.*
+import cuentas.*
+import contenidos.*
 
 describe "Tests de Cuentas"{
-
+	
+	const blackSails = new Serie(
+	nombre = "Black Sails",
+	generos = #{"Acción", "Aventuras", "Drama"},
+	perteneceAPlanBasico = true,
+	cantidadTemporadas = 4,
+	cantidadCapitulosPorTemporada = 8
+	)
+	
+	const avengersEndgame = new Pelicula(
+	nombre = "Avengers Endgame", 
+	generos = #{"Acción","Drama","Aventuras","Ciencia Ficción"}, 
+	duracion = 182, 
+	perteneceAPlanBasico = true
+	)
+	
+	const seanEternos = new Serie(
+	nombre = "Sean Eternos",
+	generos = #{"Documental"},
+	perteneceAPlanBasico = false,
+	cantidadTemporadas = 1,
+	cantidadCapitulosPorTemporada = 3
+	)
+	
 	method initialize() {
 		margoZavala.ver(blackSails)
 		margoZavala.ver(avengersEndgame)
@@ -33,12 +57,28 @@ describe "Tests de Cuentas"{
 	}	
 	
 	test "Calcular la valoración de Margo, luego de ver “Black Sails” y “Avengers Endgame”"{
-		assert.equals(34, margoZavala.valoracion())
+		assert.equals(40, margoZavala.valoracion())
 	}
 }
 
 
 describe "Test de Recomendaciones"{	
+	
+	const blackSails = new Serie(
+	nombre = "Black Sails",
+	generos = #{"Acción", "Aventuras", "Drama"},
+	perteneceAPlanBasico = true,
+	cantidadTemporadas = 4,
+	cantidadCapitulosPorTemporada = 8
+	)
+	
+	const seanEternos = new Serie(
+	nombre = "Sean Eternos",
+	generos = #{"Documental"},
+	perteneceAPlanBasico = false,
+	cantidadTemporadas = 1,
+	cantidadCapitulosPorTemporada = 3
+	)
 	
 	method initialize() {
 		
@@ -58,16 +98,15 @@ describe "Test de Recomendaciones"{
 		
 	}	
 	
-	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 70%"{
-		
-		margoZavala.desvio(0.7)
+	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 10 -- Quedo muy baja la valoracion de Sean Eternos"{
+		margoZavala.desvio(10)
 		margoZavala.ver(seanEternos)		
 		assert.equals(true,margoZavala.veria(blackSails))
 	}
 	
-	test "Cosme vería “Black Sails”"{
+	test "Cosme no vería “Black Sails” ya que tiene “Drama” y a Cosme no le gusta"{
 		
-		assert.equals(true,cosmeFulanito.veria(blackSails))
+		assert.equals(false,cosmeFulanito.veria(blackSails))
 		
 	}
 	
@@ -85,3 +124,69 @@ describe "Test de Recomendaciones"{
 	}
 	
 }
+
+
+
+/*
+/ ------------Peliculas------------
+const avengersEndgame = new Pelicula(
+	nombre = "Avengers Endgame", 
+	generos = #{"Acción","Drama", "Aventuras","Ciencia Ficción"}, 
+	duracion = 182, 
+	perteneceAPlanBasico = true
+)
+	
+const it = new Pelicula(
+	nombre = "It",
+	generos = #{"Terror"},
+	duracion = 135,
+	perteneceAPlanBasico = false
+)
+
+const eternoResplandor = new Pelicula(
+	nombre = "El eterno resplandor de una mente sin recuerdos",
+	generos = #{"Drama", "Romance", "Ciencia Ficción"},
+	duracion = 108,
+	perteneceAPlanBasico = true
+)
+
+const millenium2 = new Pelicula(
+	nombre = "Millennium 2: La chica que soñaba con una cerilla y un bidón de gasolina",
+	generos = #{"Acción", "Crimen", "Drama", "Misterio", "Suspenso"}, 
+	duracion = 129,
+	perteneceAPlanBasico = false
+)
+
+const elementos = new Pelicula(
+	nombre = "Elementos",
+	generos = #{"Animación","Comedia","Fantansía"},
+	duracion = 101,
+	perteneceAPlanBasico = true
+)
+
+// ------------Series------------
+
+const blackSails = new Serie(
+	nombre = "Black Sails",
+	generos = #{"Acción", "Aventuras", "Drama"},
+	perteneceAPlanBasico = true
+)
+
+const theWitcher = new Serie(
+	nombre = "The Witcher",
+	generos = #{"Acción","Fantasía","Drama","Misterio"},
+	perteneceAPlanBasico = true
+)
+
+const seanEternos = new Serie(
+	nombre = "Sean Eternos",
+	generos = #{"Documental"},
+	perteneceAPlanBasico = false
+)
+
+const goodOmens = new Serie(
+	nombre = "Good Omens",
+	generos = #{"Fantasía", "Comedia", "Drama"},
+	perteneceAPlanBasico = false
+)
+ */
