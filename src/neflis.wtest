@@ -4,122 +4,152 @@ import contenidos.*
 describe "Tests de Cuentas"{
 	
 	const blackSails = new Serie(
-	nombre = "Black Sails",
-	generos = #{"Acción", "Aventuras", "Drama"},
-	perteneceAPlanBasico = true,
-	cantidadTemporadas = 4,
-	cantidadCapitulosPorTemporada = 8
+		nombre = "Black Sails",
+		generos = #{"Acción", "Aventuras", "Drama"},
+		perteneceAPlanBasico = true,
+		cantidadTemporadas = 4,
+		cantidadCapitulosPorTemporada = 8
 	)
 	
 	const avengersEndgame = new Pelicula(
-	nombre = "Avengers Endgame", 
-	generos = #{"Acción","Drama","Aventuras","Ciencia Ficción"}, 
-	duracion = 182, 
-	perteneceAPlanBasico = true
+		nombre = "Avengers Endgame", 
+		generos = #{"Acción","Drama","Aventuras","Ciencia Ficción"}, 
+		duracion = 182, 
+		perteneceAPlanBasico = true
 	)
 	
-	const seanEternos = new Serie(
-	nombre = "Sean Eternos",
-	generos = #{"Documental"},
-	perteneceAPlanBasico = false,
-	cantidadTemporadas = 1,
-	cantidadCapitulosPorTemporada = 3
+	const cuentaMargo = new Cuenta(
+		planContratado = planPremium,
+		perfiles = []
 	)
-	
+
+	const margoZavala = new Perfil(
+		nombrePerfil = "Margo Zavala",
+		desvio = 0.15,
+		recomendador = valoracionSimilar
+	)
+	const elBarto = new Perfil(
+		nombrePerfil = "El Barto",
+		preferencias = #{"Animación", "Comedia", "Fantasía", "Acción", "Drama", "Terror"},
+		recomendador = preferenciaDeGenero
+	)
+
+	const cosmeFulanito = new Perfil(
+		nombrePerfil = "Cosme Fulanito",
+		preferencias = #{"Accion", "Aventuras", "Drama", "Comedia"},
+		recomendador = preferenciaDeGenero
+	) 
 	method initialize() {
+		
+		cuentaMargo.agregarPerfil(margoZavala)
+		cuentaMargo.agregarPerfil(cosmeFulanito)
+		
 		margoZavala.ver(blackSails)
 		margoZavala.ver(avengersEndgame)
 	}
 	
-	test "Cosme puede ver Black Sails" 	{
-		
-		assert.equals(true,cosmeFulanito.puedeVer(blackSails))
+	test "Crear el perfil de “El Barto” para la cuenta de Margo, con preferencia por géneros de Animación, Comedia, Fantasía, Acción, Drama y Terror. La cuenta debe quedar con 3 perfiles"{
+
+		cuentaMargo.agregarPerfil(elBarto)
+		assert.equals(3, cuentaMargo.perfiles().size())
 	}
 	
-	test "Cosme puede ver “Sean Eternos”" 	{
-		
-		assert.equals(false,cosmeFulanito.puedeVer(seanEternos))
+	test "Consultamos si el perfil de Margo Zavala es variado, no lo es porque su algoritmo es de Valoracion Similar"{
+		assert.notThat(margoZavala.esVariado())
 	}
-	
-	test "Margo puede ver “Sean Eternos”" 	{
-		
-		assert.equals(true,margoZavala.puedeVer(seanEternos))
+	test "Consultamos si el perfil de Cosme Fulanito es variado, no es variado porque tiene menos de 5 generos en sus preferencias"{
+		assert.notThat(cosmeFulanito.esVariado())
 	}
-	
-	test "Margo ve “Black Sails”" 	{
-		
-		assert.that(margoZavala.cosasVistas().contains(blackSails))
-	}	
-	
-	test "Calcular la valoración de Cosme"
-	{		
-		assert.equals(0, cosmeFulanito.valoracion())	
-	}	
-	
-	test "Calcular la valoración de Margo, luego de ver “Black Sails” y “Avengers Endgame”"{
-		assert.equals(40, margoZavala.valoracion())
+	test "Consultamos si el perfil de El Barto es variado, variado porque tiene mas de 5 generos en sus preferencias"{
+		assert.that(elBarto.esVariado())
 	}
+	test "Consideramos un perfil de “Murphy Encías Sangrantes”,el cual es fan de algunos actores y vemos si es variado, debe ser variado porque el algoritmo de Modo Fan siempre es variado"{
+		const enciasSangrantes = new Perfil(
+			nombrePerfil = "Murphy Encías Sangrantes",
+			actoresFavoritos = #{"Robert Downey Jr.", "Jim Carrey", "Henry Cavill"},
+			recomendador = modoFan
+		)
+		assert.that(enciasSangrantes.esVariado())
+	} 
+	
 }
 
 
 describe "Test de Recomendaciones"{	
 	
 	const blackSails = new Serie(
-	nombre = "Black Sails",
-	generos = #{"Acción", "Aventuras", "Drama"},
-	perteneceAPlanBasico = true,
-	cantidadTemporadas = 4,
-	cantidadCapitulosPorTemporada = 8
+		nombre = "Black Sails",
+		generos = #{"Acción", "Aventuras", "Drama"},
+		perteneceAPlanBasico = true,
+		cantidadTemporadas = 4,
+		cantidadCapitulosPorTemporada = 8
 	)
 	
 	const seanEternos = new Serie(
-	nombre = "Sean Eternos",
-	generos = #{"Documental"},
-	perteneceAPlanBasico = false,
-	cantidadTemporadas = 1,
-	cantidadCapitulosPorTemporada = 3
+		nombre = "Sean Eternos",
+		generos = #{"Documental"},
+		perteneceAPlanBasico = false,
+		cantidadTemporadas = 1,
+		cantidadCapitulosPorTemporada = 3
 	)
 	
+	const cuentaMargo = new Cuenta(
+		planContratado = planPremium,
+		perfiles = []
+	)
+
+	const margoZavala = new Perfil(
+		nombrePerfil = "Margo Zavala",
+		desvio = 0.15,
+		recomendador = valoracionSimilar
+	)
+
+	const cosmeFulanito = new Perfil(
+		nombrePerfil = "Cosme Fulanito",
+		preferencias = #{"Accion", "Aventuras", "Drama", "Comedia"},
+		recomendador = preferenciaDeGenero
+	)
 	method initialize() {
 		
-		margoZavala.desvio(0.15)
-		
+		cuentaMargo.agregarPerfil(margoZavala)
+		cuentaMargo.agregarPerfil(cosmeFulanito)
+
 	}
 	
 	test "Margo (inicialmente con una lista de contenidos vistos vacía) podría ver “Sean Eternos”"{
 				
-		assert.equals(true,margoZavala.veria(seanEternos))	
+		assert.equals(true,margoZavala.puedeVer(seanEternos))	
 	}
 	
 	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”"{
 				
 		margoZavala.ver(seanEternos)
-		assert.equals(false,margoZavala.veria(blackSails))
+		assert.equals(false,margoZavala.puedeVer(blackSails))
 		
 	}	
 	
 	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 10 -- Quedo muy baja la valoracion de Sean Eternos"{
 		margoZavala.desvio(10)
 		margoZavala.ver(seanEternos)		
-		assert.equals(true,margoZavala.veria(blackSails))
+		assert.equals(true,margoZavala.seRecomienda(blackSails))
 	}
 	
 	test "Cosme no vería “Black Sails” ya que tiene “Drama” y a Cosme no le gusta"{
 		
-		assert.equals(false,cosmeFulanito.veria(blackSails))
+		assert.equals(false,cosmeFulanito.seRecomienda(blackSails))
 		
 	}
 	
 	test "Cosme vería “Sean Eternos”"{
 		
-		assert.equals(false,cosmeFulanito.veria(seanEternos))
+		assert.equals(false,cosmeFulanito.seRecomienda(seanEternos))
 		
 	}
 		
 	test "Cosme con agregado de preferencia de género “Documental” podría ver “Sean Eternos”"{
 		
-		cosmeFulanito.preferencias("Documental")
-		assert.equals(true,cosmeFulanito.veria(seanEternos))
+		cosmeFulanito.preferencias(#{"Documental"})
+		assert.equals(true,cosmeFulanito.seRecomienda(seanEternos))
 		
 	}
 	

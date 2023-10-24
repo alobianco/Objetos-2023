@@ -2,8 +2,8 @@ import contenidos.*
 
 class Cuenta{
 	var property planContratado = planBasico
-	const property perfiles = []
-	method agregarCuenta(cuenta){
+	var property perfiles = []
+	method agregarPerfil(cuenta){
 		perfiles.add(cuenta)
 		self.planesEnPerfiles()
 	}
@@ -18,10 +18,10 @@ class Perfil inherits Cuenta{
 	var property desvio = 0
 	var property preferencias = #{}
 	var property actoresFavoritos = #{}
-	const property nombrePerfil = ""
-	var property cosasVistas = []
-	const property valoracion = 0
 	var property recomendador = preferenciaDeGenero
+	var property cosasVistas = #{}
+	const property nombrePerfil = ""
+	const property valoracion = 0
 	
 	method puedeVer(contenido) = planContratado.perteneceAPlan(contenido)
 	
@@ -36,37 +36,48 @@ class Perfil inherits Cuenta{
 		return sumValoracion / cosasVistas.size()
 	}
 	
+	method esVariado(){
+		return recomendador.esVariado(preferencias)
+	}
+	
+	method seRecomienda(contenido){
+		if(self.valoracion()==0){
+			return true
+		}
+		else{
+			return recomendador.algoritmoElegido(contenido, self)
+			
+		}
+	}
 }
 
 
 object valoracionSimilar{
+	
+	method esVariado(preferencias) = false
+	method algoritmoElegido(contenido, usuario){
+		return contenido.valoracion().between(usuario.valoracion() * ( 1 - usuario.desvio()), usuario.valoracion() * ( 1 + usuario.desvio()) )
+	}
 
 }
 
 object preferenciaDeGenero{
-
+	method esVariado(preferencias){
+		return preferencias.size() >= 5
+	}
+	method algoritmoElegido(contenido, usuario){
+		return usuario.preferencias().intersection(contenido.generos()) != #{} 
+	}
 }
 
 object modoFan{
 
-
+	method esVariado(preferencias) = true
+	method algoritmoElegido(contenido, usuario){
+		return contenido.reparto().filter { n => usuario.actoresFavoritos().contains(n)} != #{}
+	}
 }
 
-const cuentaMargo = new Cuenta(
-	planContratado = planPremium,
-	perfiles = [margoZavala]
-)
-
-const margoZavala = new Perfil(
-	nombrePerfil = "Margo Zavala", 
-	recomendador = valoracionSimilar
-)
-
-const cosmeFulanito = new Perfil(
-	nombrePerfil = "Cosme Fulanito",
-	preferencias = #{"Accion", "Aventuras", "Drama", "Comedia","a","b"},
-	recomendador = preferenciaDeGenero
-)
 
 object planBasico{
 	method perteneceAPlan(contenido){return contenido.perteneceAPlanBasico() }

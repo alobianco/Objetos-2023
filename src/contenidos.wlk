@@ -18,7 +18,6 @@ class Pelicula inherits Contenido{
 }
 
 class Serie inherits Contenido{
-	//Nombre y generos en Contenido
 	var property cantidadTemporadas = 0
 	const property cantidadCapitulosPorTemporada
 	
@@ -30,27 +29,3 @@ class Serie inherits Contenido{
 	}
 	
 }
-/*
-const blackSails = new Serie(
-	nombre = "Black Sails",
-	generos = #{"Acción", "Aventuras", "Drama"},
-	perteneceAPlanBasico = true,
-	cantidadTemporadas = 4,
-	cantidadCapitulosPorTemporada = 8
-)
-	
-const seanEternos = new Serie(
-	nombre = "Sean Eternos",
-	generos = #{"Documental"},
-	perteneceAPlanBasico = false,
-	cantidadTemporadas = 1,
-	cantidadCapitulosPorTemporada = 3
-)
-
-const avengersEndgame = new Pelicula(
-	nombre = "Avengers Endgame", 
-	generos = #{"Acción","Drama","Aventuras","Ciencia Ficción"}, 
-	duracion = 182, 
-	perteneceAPlanBasico = true
-)
-*/
