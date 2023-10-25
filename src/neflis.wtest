@@ -3,47 +3,22 @@ import contenidos.*
 
 describe "Tests de Cuentas"{
 	
-	const blackSails = new Serie(
-		nombre = "Black Sails",
-		generos = #{"Acción", "Aventuras", "Drama"},
-		perteneceAPlanBasico = true,
-		cantidadTemporadas = 4,
-		cantidadCapitulosPorTemporada = 8
-	)
-	
-	const avengersEndgame = new Pelicula(
-		nombre = "Avengers Endgame", 
-		generos = #{"Acción","Drama","Aventuras","Ciencia Ficción"}, 
-		duracion = 182, 
-		perteneceAPlanBasico = true
-	)
-	
-	const cuentaMargo = new Cuenta(
-		planContratado = planPremium,
-		perfiles = []
-	)
 
-	const margoZavala = new Perfil(
-		nombrePerfil = "Margo Zavala",
-		desvio = 0.15,
-		recomendador = valoracionSimilar
-	)
 	const elBarto = new Perfil(
 		nombrePerfil = "El Barto",
 		preferencias = #{"Animación", "Comedia", "Fantasía", "Acción", "Drama", "Terror"},
 		recomendador = preferenciaDeGenero
 	)
+	const enciasSangrantes = new Perfil(
+		nombrePerfil = "Murphy Encías Sangrantes",
+		actoresFavoritos = #{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"},
+		recomendador = modoFan
+	)
 
-	const cosmeFulanito = new Perfil(
-		nombrePerfil = "Cosme Fulanito",
-		preferencias = #{"Accion", "Aventuras", "Drama", "Comedia"},
-		recomendador = preferenciaDeGenero
-	) 
 	method initialize() {
 		
 		cuentaMargo.agregarPerfil(margoZavala)
 		cuentaMargo.agregarPerfil(cosmeFulanito)
-		
 		margoZavala.ver(blackSails)
 		margoZavala.ver(avengersEndgame)
 	}
@@ -64,11 +39,6 @@ describe "Tests de Cuentas"{
 		assert.that(elBarto.esVariado())
 	}
 	test "Consideramos un perfil de “Murphy Encías Sangrantes”,el cual es fan de algunos actores y vemos si es variado, debe ser variado porque el algoritmo de Modo Fan siempre es variado"{
-		const enciasSangrantes = new Perfil(
-			nombrePerfil = "Murphy Encías Sangrantes",
-			actoresFavoritos = #{"Robert Downey Jr.", "Jim Carrey", "Henry Cavill"},
-			recomendador = modoFan
-		)
 		assert.that(enciasSangrantes.esVariado())
 	} 
 	
@@ -77,42 +47,16 @@ describe "Tests de Cuentas"{
 
 describe "Test de Recomendaciones"{	
 	
-	const blackSails = new Serie(
-		nombre = "Black Sails",
-		generos = #{"Acción", "Aventuras", "Drama"},
-		perteneceAPlanBasico = true,
-		cantidadTemporadas = 4,
-		cantidadCapitulosPorTemporada = 8
-	)
-	
-	const seanEternos = new Serie(
-		nombre = "Sean Eternos",
-		generos = #{"Documental"},
-		perteneceAPlanBasico = false,
-		cantidadTemporadas = 1,
-		cantidadCapitulosPorTemporada = 3
-	)
-	
-	const cuentaMargo = new Cuenta(
-		planContratado = planPremium,
-		perfiles = []
-	)
-
-	const margoZavala = new Perfil(
-		nombrePerfil = "Margo Zavala",
-		desvio = 0.15,
-		recomendador = valoracionSimilar
-	)
-
-	const cosmeFulanito = new Perfil(
-		nombrePerfil = "Cosme Fulanito",
-		preferencias = #{"Accion", "Aventuras", "Drama", "Comedia"},
-		recomendador = preferenciaDeGenero
+	const enciasSangrantes = new Perfil(
+		nombrePerfil = "Murphy Encías Sangrantes",
+		actoresFavoritos = #{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"},
+		recomendador = modoFan
 	)
 	method initialize() {
 		
 		cuentaMargo.agregarPerfil(margoZavala)
 		cuentaMargo.agregarPerfil(cosmeFulanito)
+		cuentaMargo.agregarPerfil(enciasSangrantes)
 
 	}
 	
@@ -121,12 +65,12 @@ describe "Test de Recomendaciones"{
 		assert.equals(true,margoZavala.puedeVer(seanEternos))	
 	}
 	
-	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”"{
+	test "Margo luego de ver “Sean Eternos”, se le recomienda “Black Sails”"{
 				
 		margoZavala.ver(seanEternos)
-		assert.equals(false,margoZavala.puedeVer(blackSails))
+		assert.equals(false,margoZavala.seRecomienda(blackSails))
 		
-	}	
+	}		
 	
 	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 10 -- Quedo muy baja la valoracion de Sean Eternos"{
 		margoZavala.desvio(10)
@@ -134,13 +78,14 @@ describe "Test de Recomendaciones"{
 		assert.equals(true,margoZavala.seRecomienda(blackSails))
 	}
 	
-	test "Cosme no vería “Black Sails” ya que tiene “Drama” y a Cosme no le gusta"{
+	test "Cosme vería “Black Sails” ya que tiene sus generos preferidos, aunque tenga otros"{
 		
-		assert.equals(false,cosmeFulanito.seRecomienda(blackSails))
+		assert.that(cosmeFulanito.seRecomienda(blackSails)
+		)
 		
 	}
 	
-	test "Cosme vería “Sean Eternos”"{
+	test "Cosme no vería “Sean Eternos”"{
 		
 		assert.equals(false,cosmeFulanito.seRecomienda(seanEternos))
 		
@@ -152,71 +97,10 @@ describe "Test de Recomendaciones"{
 		assert.equals(true,cosmeFulanito.seRecomienda(seanEternos))
 		
 	}
-	
+	test "Encias Sangrantes es fanatico de Messi, Robert Downey Jr. y de Henry Cavill, entonces se le recomienda, Sean Eternos, Avengers Endgame y The Witcher"{
+		assert.that(enciasSangrantes.seRecomienda(avengersEndgame))
+		assert.that(enciasSangrantes.seRecomienda(seanEternos))
+		assert.that(enciasSangrantes.seRecomienda(theWitcher))
+	}
 }
 
-
-
-/*
-/ ------------Peliculas------------
-const avengersEndgame = new Pelicula(
-	nombre = "Avengers Endgame", 
-	generos = #{"Acción","Drama", "Aventuras","Ciencia Ficción"}, 
-	duracion = 182, 
-	perteneceAPlanBasico = true
-)
-	
-const it = new Pelicula(
-	nombre = "It",
-	generos = #{"Terror"},
-	duracion = 135,
-	perteneceAPlanBasico = false
-)
-
-const eternoResplandor = new Pelicula(
-	nombre = "El eterno resplandor de una mente sin recuerdos",
-	generos = #{"Drama", "Romance", "Ciencia Ficción"},
-	duracion = 108,
-	perteneceAPlanBasico = true
-)
-
-const millenium2 = new Pelicula(
-	nombre = "Millennium 2: La chica que soñaba con una cerilla y un bidón de gasolina",
-	generos = #{"Acción", "Crimen", "Drama", "Misterio", "Suspenso"}, 
-	duracion = 129,
-	perteneceAPlanBasico = false
-)
-
-const elementos = new Pelicula(
-	nombre = "Elementos",
-	generos = #{"Animación","Comedia","Fantansía"},
-	duracion = 101,
-	perteneceAPlanBasico = true
-)
-
-// ------------Series------------
-
-const blackSails = new Serie(
-	nombre = "Black Sails",
-	generos = #{"Acción", "Aventuras", "Drama"},
-	perteneceAPlanBasico = true
-)
-
-const theWitcher = new Serie(
-	nombre = "The Witcher",
-	generos = #{"Acción","Fantasía","Drama","Misterio"},
-	perteneceAPlanBasico = true
-)
-
-const seanEternos = new Serie(
-	nombre = "Sean Eternos",
-	generos = #{"Documental"},
-	perteneceAPlanBasico = false
-)
-
-const goodOmens = new Serie(
-	nombre = "Good Omens",
-	generos = #{"Fantasía", "Comedia", "Drama"},
-	perteneceAPlanBasico = false
-)
- */

@@ -21,7 +21,7 @@ class Perfil inherits Cuenta{
 	var property recomendador = preferenciaDeGenero
 	var property cosasVistas = #{}
 	const property nombrePerfil = ""
-	const property valoracion = 0
+	var property valoracion = 0
 	
 	method puedeVer(contenido) = planContratado.perteneceAPlan(contenido)
 	
@@ -33,7 +33,8 @@ class Perfil inherits Cuenta{
 	method valoracion() {
 		if (cosasVistas.size() == 0) {return 0}
 		const sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
-		return sumValoracion / cosasVistas.size()
+		valoracion = sumValoracion / cosasVistas.size()
+		return valoracion
 	}
 	
 	method esVariado(){
@@ -41,13 +42,7 @@ class Perfil inherits Cuenta{
 	}
 	
 	method seRecomienda(contenido){
-		if(self.valoracion()==0){
-			return true
-		}
-		else{
-			return recomendador.algoritmoElegido(contenido, self)
-			
-		}
+		return recomendador.algoritmoElegido(contenido, self)
 	}
 }
 
@@ -56,8 +51,13 @@ object valoracionSimilar{
 	
 	method esVariado(preferencias) = false
 	method algoritmoElegido(contenido, usuario){
-		return contenido.valoracion().between(usuario.valoracion() * ( 1 - usuario.desvio()), usuario.valoracion() * ( 1 + usuario.desvio()) )
-	}
+		if((usuario.valoracion()==0)||(usuario.cosasVistas().contains(contenido))){
+			return true
+		}
+		else{
+			 return contenido.valoracion().between(usuario.valoracion() * ( 1 - usuario.desvio()), usuario.valoracion() * ( 1 + usuario.desvio()) )
+			 }	 
+		}
 
 }
 
@@ -66,7 +66,12 @@ object preferenciaDeGenero{
 		return preferencias.size() >= 5
 	}
 	method algoritmoElegido(contenido, usuario){
-		return usuario.preferencias().intersection(contenido.generos()) != #{} 
+		if(usuario.cosasVistas().contains(contenido)){
+			return false
+		}
+		else{
+			return usuario.preferencias().intersection(contenido.generos()) != #{}
+		} 
 	}
 }
 
@@ -74,7 +79,12 @@ object modoFan{
 
 	method esVariado(preferencias) = true
 	method algoritmoElegido(contenido, usuario){
+		if(usuario.cosasVistas().contains(contenido)){
+			return false
+		}
+		else{
 		return contenido.reparto().filter { n => usuario.actoresFavoritos().contains(n)} != #{}
+		}
 	}
 }
 
@@ -85,3 +95,20 @@ object planBasico{
 object planPremium{
 	method perteneceAPlan(contenido) = true
 }
+	
+const cuentaMargo = new Cuenta(
+	planContratado = planPremium,
+	perfiles = []
+)
+
+const margoZavala = new Perfil(
+	nombrePerfil = "Margo Zavala",
+	desvio = 0.15,
+	recomendador = valoracionSimilar
+)
+
+const cosmeFulanito = new Perfil(
+	nombrePerfil = "Cosme Fulanito",
+	preferencias = #{"Accion", "Aventuras", "Drama", "Comedia"},
+	recomendador = preferenciaDeGenero
+)
