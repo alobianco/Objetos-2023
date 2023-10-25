@@ -1,7 +1,7 @@
 object cosmeFulanito {
 
 	const planContratado = planBasico
-
+	
 	const cosasVistas = []
 	const preferencias = #{"Acción", "Aventuras"}
 	
@@ -14,16 +14,29 @@ object cosmeFulanito {
 	}	
 		
 	method valoracion() {
-	
+		
 		if (cosasVistas.size() == 0) {return 0}
-	
+		
 		const sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
-	
+		
 		return sumValoracion / cosasVistas.size()
 	}	
- 
+
 	method preferencias() {return preferencias}
-	method preferencias (genero) {preferencias.add(genero)}
+	
+	method preferencias(genero) {preferencias.add(genero)}
+	
+	method leGustanTodosLosGenerosDe(contenido) {
+	    return contenido.generos().all { genero => self.preferencias().contains(genero) }
+	}
+	
+	method tieneAlgunGeneroEnComunCon(contenido) {
+	    return !(self.preferencias().intersection(contenido.generos()) == #{})
+	}
+	
+	method leGustaElGenero(genero) {
+	    return self.preferencias().contains(genero)
+	}
 	
 	method veria(contenido) {
 		return contenido.esRecomendadoA(self)
@@ -40,7 +53,9 @@ object margoZavala {
 	method puedeVer(contenido) = planContratado.perteneceAPlan(contenido)
 	
 	method ver(contenido) {
+		
 		if (self.puedeVer(contenido)) {
+			
 			cosasVistas.add(contenido)
 		}
 	}
@@ -48,18 +63,15 @@ object margoZavala {
 	method cosasVistas(){return cosasVistas}
 
 	method valoracion() {
-	
 		if (cosasVistas.size() == 0) {return 0}
-	
 		const sumValoracion = cosasVistas.map({ contenido => contenido.valoracion()}).sum()
-	
 		return sumValoracion / cosasVistas.size()
 	}
 	 
-	 method veria(contenido){
-	 	if (self.valoracion()==0){
+	method veria(contenido) {
+	 	if (self.valoracion() == 0) {
 	 		return true
-		} else{		
+		} else {		
 			return contenido.valoracion().between(self.valoracion() * ( 1 - desvio), self.valoracion() * ( 1 + desvio) )
 		}
 	 }
@@ -76,9 +88,11 @@ object blackSails {
 	method perteneceAPlanBasico() = true
 	method valoracion() = temporadas * capitulos
 	
-	method esRecomendadoA(persona){
-		 return  persona.preferencias().filter { n => self.generos().contains(n)} == self.generos()
-		}
+	method esRecomendadoA(persona) {
+		
+	    return persona.leGustanTodosLosGenerosDe(self)
+	    
+	}
 }
 
 object avengersEndgame {
@@ -88,8 +102,9 @@ object avengersEndgame {
 	
 	method perteneceAPlanBasico() = true
 	method valoracion() = generos.size() * 12
-	method esRecomendadoA(persona){
-		return !((persona.preferencias().intersection(generos)) == #{})
+	
+	method esRecomendadoA(persona) {
+	    return persona.tieneAlgunGeneroEnComunCon(self)
 	}
 }
 
@@ -100,18 +115,22 @@ object seanEternos {
 	
 	method perteneceAPlanBasico() = false
 	method valoracion() = 100
-	method esRecomendadoA(persona){
-		return persona.preferencias().contains("Documental")
+	
+	method esRecomendadoA(persona) {
+		
+	    return persona.leGustaElGenero("Documental")
+	    
 	}
 }
 
-object planBasico{
-	method perteneceAPlan(contenido){return contenido.perteneceAPlanBasico() }
+object planBasico {
+	
+	method perteneceAPlan(contenido) {return contenido.perteneceAPlanBasico() }
+	
 }
-object planPremium{
+
+object planPremium {
+	
 	method perteneceAPlan(contenido) = true
+	
 }
-
-
-
-
