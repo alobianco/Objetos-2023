@@ -6,12 +6,10 @@ describe "Tests de Cuentas"{
 
 	const elBarto = new Perfil(
 		nombrePerfil = "El Barto",
-		preferencias = #{"Animación", "Comedia", "Fantasía", "Acción", "Drama", "Terror"},
 		recomendador = preferenciaDeGenero
 	)
 	const enciasSangrantes = new Perfil(
 		nombrePerfil = "Murphy Encías Sangrantes",
-		actoresFavoritos = #{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"},
 		recomendador = modoFan
 	)
 
@@ -33,9 +31,11 @@ describe "Tests de Cuentas"{
 		assert.notThat(margoZavala.esVariado())
 	}
 	test "Consultamos si el perfil de Cosme Fulanito es variado, no es variado porque tiene menos de 5 generos en sus preferencias"{
+		cosmeFulanito.recomendador().preferencias(#{"Acción","Aventuras"})
 		assert.notThat(cosmeFulanito.esVariado())
 	}
 	test "Consultamos si el perfil de El Barto es variado, variado porque tiene mas de 5 generos en sus preferencias"{
+		cosmeFulanito.recomendador().preferencias(#{"Animación", "Comedia", "Fantasía", "Acción", "Drama", "Terror"})
 		assert.that(elBarto.esVariado())
 	}
 	test "Consideramos un perfil de “Murphy Encías Sangrantes”,el cual es fan de algunos actores y vemos si es variado, debe ser variado porque el algoritmo de Modo Fan siempre es variado"{
@@ -49,7 +49,6 @@ describe "Test de Recomendaciones"{
 	
 	const enciasSangrantes = new Perfil(
 		nombrePerfil = "Murphy Encías Sangrantes",
-		actoresFavoritos = #{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"},
 		recomendador = modoFan
 	)
 	method initialize() {
@@ -73,13 +72,13 @@ describe "Test de Recomendaciones"{
 	}		
 	
 	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 10 -- Quedo muy baja la valoracion de Sean Eternos"{
-		margoZavala.desvio(10)
+		cuentaMargo.desvio(10)
 		margoZavala.ver(seanEternos)		
 		assert.equals(true,margoZavala.seRecomienda(blackSails))
 	}
 	
 	test "Cosme vería “Black Sails” ya que tiene sus generos preferidos, aunque tenga otros"{
-		
+		cosmeFulanito.recomendador().preferencias(#{"Acción","Aventuras"})
 		assert.that(cosmeFulanito.seRecomienda(blackSails)
 		)
 		
@@ -93,11 +92,12 @@ describe "Test de Recomendaciones"{
 		
 	test "Cosme con agregado de preferencia de género “Documental” podría ver “Sean Eternos”"{
 		
-		cosmeFulanito.preferencias(#{"Documental"})
+		cosmeFulanito.recomendador().preferencias(#{"Acción","Aventuras","Documental"})
 		assert.equals(true,cosmeFulanito.seRecomienda(seanEternos))
 		
 	}
 	test "Encias Sangrantes es fanatico de Messi, Robert Downey Jr. y de Henry Cavill, entonces se le recomienda, Sean Eternos, Avengers Endgame y The Witcher"{
+		enciasSangrantes.recomendador().preferencias(#{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"})
 		assert.that(enciasSangrantes.seRecomienda(avengersEndgame))
 		assert.that(enciasSangrantes.seRecomienda(seanEternos))
 		assert.that(enciasSangrantes.seRecomienda(theWitcher))
