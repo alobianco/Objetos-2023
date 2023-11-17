@@ -97,7 +97,7 @@ describe "Test de Recomendaciones"{
 		
 	}
 	test "Encias Sangrantes es fanatico de Messi, Robert Downey Jr. y de Henry Cavill, entonces se le recomienda, Sean Eternos, Avengers Endgame y The Witcher"{
-		enciasSangrantes.recomendador().preferencias(#{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"})
+		enciasSangrantes.recomendador().actoresFavoritos(#{"Robert Downey Jr.", "Lionel Messi", "Henry Cavill"})
 		assert.that(enciasSangrantes.seRecomienda(avengersEndgame))
 		assert.that(enciasSangrantes.seRecomienda(seanEternos))
 		assert.that(enciasSangrantes.seRecomienda(theWitcher))
