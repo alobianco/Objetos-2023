@@ -72,7 +72,7 @@ describe "Test de Recomendaciones"{
 	}		
 	
 	test "Margo luego de ver “Sean Eternos”, podría ver “Black Sails”, cambiando el desvío a 10 -- Quedo muy baja la valoracion de Sean Eternos"{
-		cuentaMargo.desvio(10)
+		desvio.numero(10)
 		margoZavala.ver(seanEternos)		
 		assert.equals(true,margoZavala.seRecomienda(blackSails))
 	}

@@ -6,12 +6,13 @@ import contenidos.*
 class Cuenta{
 	var property planContratado = planBasico
 	var property perfiles = []
-	var property desvio = 0.15
 	method agregarPerfil(cuenta){
 		perfiles.add(cuenta)
 	}
 }
-
+object desvio{
+	var property numero = 0.15
+}
 //--------------------------------------------------------------------//
 //-------------------------------Perfil-------------------------------//
 //--------------------------------------------------------------------//
@@ -55,7 +56,7 @@ object valoracionSimilar{
 			return true
 		}
 		else{
-			 return contenido.valoracion().between(usuario.valoracion() * ( 1 - usuario.perteneceACuenta().desvio()), usuario.valoracion() * ( 1 + usuario.perteneceACuenta().desvio()) )
+			 return contenido.valoracion().between(usuario.valoracion() * ( 1 - desvio.numero()), usuario.valoracion() * ( 1 + desvio.numero()) )
 			 }	 
 		}
 
